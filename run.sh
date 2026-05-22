@@ -21,16 +21,30 @@ if [ ! -f "app.db" ]; then
     touch app.db
 fi
 
-# 3. Run migrations using a temporary .NET SDK Docker container (Zero-install host migrations!)
+# 3a. Restore + Build first so any compile errors are visible
+echo "🔨 Restoring and building project inside SDK container..."
+docker run --rm \
+  -v "$(pwd):/src" \
+  -w "/src" \
+  mcr.microsoft.com/dotnet/sdk:8.0 \
+  bash -c "dotnet restore && dotnet build -c Release"
+
+if [ $? -ne 0 ]; then
+    echo "❌ Build failed. Fix the errors above before continuing."
+    exit 1
+fi
+echo "✔️ Build succeeded."
+
+# 3b. Run migrations using --no-build (project already compiled above)
 echo "📦 Running database migrations in .NET SDK container..."
 docker run --rm \
   -v "$(pwd):/src" \
   -w "/src" \
   mcr.microsoft.com/dotnet/sdk:8.0 \
-  bash -c "dotnet tool install --global dotnet-ef && export PATH=\$PATH:\$HOME/.dotnet/tools && dotnet restore && dotnet ef database update"
+  bash -c "dotnet tool install --global dotnet-ef --version '8.*' && export PATH=\$PATH:\$HOME/.dotnet/tools && dotnet restore && dotnet ef database update"
 
 if [ $? -ne 0 ]; then
-    echo "❌ Database migration failed. Checking output..."
+    echo "❌ Database migration failed."
     exit 1
 fi
 echo "✔️ Database migrations applied successfully."

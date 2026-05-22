@@ -1,18 +1,41 @@
 @page
 @model Managingtasks.Pages.Tasks.CreateModel
+@{
+    ViewData["Title"] = "Add Task";
+}
 
-<h1>Create Task</h1>
-
-<form method="post">
-    <div>
-        <label>Title</label>
-        <input asp-for="TaskItem.Title" />
+<div class="page-wrapper" style="max-width: 600px;">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Add Task</h1>
+            <p class="page-subtitle">Create a new task to track</p>
+        </div>
     </div>
 
-    <div>
-        <label>Description</label>
-        <input asp-for="TaskItem.Description" />
-    </div>
+    <div class="card-dark" style="padding: 2rem;">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="validation-error" style="display:none;"></div>
 
-    <button type="submit">Save</button>
-</form>
+            <div class="create-form-group">
+                <label asp-for="TaskItem.Title">Title <span style="color:var(--danger)">*</span></label>
+                <input asp-for="TaskItem.Title" placeholder="What needs to be done?" />
+                <span asp-validation-for="TaskItem.Title" class="field-error"></span>
+            </div>
+
+            <div class="create-form-group">
+                <label asp-for="TaskItem.Description">Description</label>
+                <input asp-for="TaskItem.Description" placeholder="Optional — add more details..." />
+                <span asp-validation-for="TaskItem.Description" class="field-error"></span>
+            </div>
+
+            <div class="create-form-actions">
+                <button type="submit" class="btn-primary-custom">＋ Create Task</button>
+                <a asp-page="/Tasks/Index" class="btn-cancel-custom">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
