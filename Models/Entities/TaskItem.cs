@@ -15,6 +15,8 @@ public class TaskItem
 
     public TaskItemStatus Status { get; set; } = TaskItemStatus.ToDo;
 
+    public TaskPriority Priority { get; set; } = TaskPriority.Medium;
+
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 

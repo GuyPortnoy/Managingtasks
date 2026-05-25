@@ -1,5 +1,6 @@
 @page
 @model Managingtasks.Pages.Tasks.IndexModel
+@using Managingtasks.Models.Enums
 <head>
     <title>Main Page</title>
     <style>
@@ -19,7 +20,7 @@
             width: 600px;   
             padding: 10px 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px #1d8bec;
             text-align: center;
             overflow-x: auto;
         }
@@ -37,7 +38,7 @@
         }
 
         th {
-            background: #333;
+            background: #0088ff;
             color: white;
         }
 
@@ -50,6 +51,16 @@
             text-align: center;
             width: 100%;
         }
+        .button button1 {
+            background-color: #0088ff;
+            color: white;
+            padding: 15px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
               
     </style>
 </head>
@@ -57,11 +68,8 @@
     <h1  class="page-title">Main Page</h1>
     <h2 class="">Your Tasks</h2>
     <div class="container">
-        <form method="post" asp-page-handler="add"></form>
-          <a asp-page="/Tasks/Create" class="button button1">+ Task</a>
-        </form>
-        <a class="button button1">Edit</a>
-        <a class="button button2">Delete</a>
+        <!--<form method="post" asp-page-handler="add"></form>-->
+        <a asp-page="/Tasks/Create" class="button button1">+ Task</a>
         <table>
           <tr>
               <th>Id</th>
@@ -76,28 +84,40 @@
     
 
           <tr>
-              <td>Title</td>
+              <td>@task.Id</td>
+              <td>@task.Title</td>
               <td>Admin</td>
-              <td>Description</td>
+              <td>@task.Description</td>
               <td>
                 <form method="post" asp-page-handler="edit">
                     <input type="hidden" name="id" value="@task.Id" />
                     <select name="status">
-                        <option value="ToDo">To Do</option>
-                        <option value="InProgress">In Progress</option>
-                        <option value="Done">Done</option>
+                        <option value="ToDo" @(task.Status == TaskItemStatus.ToDo ? "selected" : "")>
+                            To Do
+                        </option>
+
+                        <option value="InProgress" @(task.Status == TaskItemStatus.InProgress ? "selected" : "")>
+                            In Progress
+                        </option>
+
+                        <option value="Done" @(task.Status == TaskItemStatus.Done ? "selected" : "")>
+                            Done
+                        </option>
                     </select>
                     <button type="submit">Save</button>
                 </form>
               </td>
-              <td>CreatedAt</td>
-              <td>UpdatedAt</td>
+              <td>@task.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+              <td>@task.UpdatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
               <td>
+                <a asp-page="/Tasks/Edit" asp-route-id="@task.Id"
+                    class="button button2">Edit</a>
                 <form method="post" asp-page-handler="Delete">
                   <input type="hidden" name="id" value="@task.Id" />
                   <button type="submit">Delete</button>
                 </form>
               </td>
+              
           </tr>
           
           }

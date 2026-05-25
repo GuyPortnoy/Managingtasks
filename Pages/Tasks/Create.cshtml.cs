@@ -26,13 +26,15 @@ public class CreateModel : PageModel
 
     public IActionResult OnPost()
     {
+        if (!ModelState.IsValid)
+            return Page();
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         TaskItem.UserId = userId;
-
+        TaskItem.CreatedAt = DateTime.UtcNow;
+        TaskItem.UpdatedAt = DateTime.UtcNow;
         _db.Tasks.Add(TaskItem);
         _db.SaveChanges();
-
-        return RedirectToPage("Index");
+    return RedirectToPage("/Tasks/Index");
     }
 }

@@ -31,36 +31,19 @@ public class IndexModel : PageModel
             .Where(t => t.UserId == userId)
             .ToList();
     }
-    public IActionResult OnPostadd()
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    // public IActionResult OnPostadd()
+    // {
+    //     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        TaskItem.UserId = userId;
-        TaskItem.CreatedAt = DateTime.UtcNow;
-        TaskItem.UpdatedAt = DateTime.UtcNow;
+    //     TaskItem.UserId = userId;
+    //     TaskItem.CreatedAt = DateTime.UtcNow;
+    //     TaskItem.UpdatedAt = DateTime.UtcNow;
 
-        _db.Tasks.Add(TaskItem);
-        _db.SaveChanges();
+    //     _db.Tasks.Add(TaskItem);
+    //     _db.SaveChanges();
 
-        return RedirectToPage("Index");
-    }
-    public IActionResult OnPostedit(int id, TaskItemStatus status)
-    {
-    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-    var task = _db.Tasks.FirstOrDefault(t => t.Id == id);
-
-    if (task == null || task.UserId != userId)
-    {
-        return NotFound();
-    }
-
-    task.Status = status;
-
-    _db.SaveChanges();
-
-    return RedirectToPage();
-    }
+    //     return RedirectToPage("Index");
+    // }in case it will be needed in the future
     public IActionResult OnPostDelete(int id){
       var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
