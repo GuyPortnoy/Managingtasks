@@ -1,34 +1,73 @@
 @page
 @model Managingtasks.Pages.Tasks.EditModel
+@using Managingtasks.Models.Enums
+@{
+    ViewData["Title"] = "Edit Task";
+}
 
-<h1>Edit Task</h1>
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="glass-card mt-4">
+            <div class="text-center mb-4">
+                <span class="fs-1">✏️</span>
+                <h2 class="fw-bold mt-2">Edit Task Details</h2>
+                <p class="text-muted small">Update your task information, priority, and status fields.</p>
+            </div>
 
-<form method="post">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+                <input type="hidden" asp-for="Task.Id" />
 
-    <input type="hidden" asp-for="Task.Id" />
+                <!-- Title Input -->
+                <div class="premium-form-group">
+                    <label asp-for="Task.Title" class="premium-form-label">Task Title</label>
+                    <input asp-for="Task.Title" class="premium-input" required minlength="2" />
+                    <span asp-validation-for="Task.Title" class="text-danger small mt-1 d-block"></span>
+                </div>
 
-    <div>
-        <label>Title</label>
-        <input asp-for="Task.Title" />
+                <!-- Description Textarea -->
+                <div class="premium-form-group">
+                    <label asp-for="Task.Description" class="premium-form-label">Description</label>
+                    <textarea asp-for="Task.Description" class="premium-textarea" rows="4"></textarea>
+                    <span asp-validation-for="Task.Description" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <div class="row">
+                    <!-- Priority Selector -->
+                    <div class="col-sm-6">
+                        <div class="premium-form-group">
+                            <label asp-for="Task.Priority" class="premium-form-label">Priority</label>
+                            <select asp-for="Task.Priority" class="premium-select" asp-items="Html.GetEnumSelectList<TaskPriority>()">
+                            </select>
+                            <span asp-validation-for="Task.Priority" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Status Selector -->
+                    <div class="col-sm-6">
+                        <div class="premium-form-group">
+                            <label asp-for="Task.Status" class="premium-form-label">Status</label>
+                            <select asp-for="Task.Status" class="premium-select" asp-items="Html.GetEnumSelectList<TaskItemStatus>()">
+                            </select>
+                            <span asp-validation-for="Task.Status" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <a asp-page="/Tasks/Index" class="text-light-hover small text-decoration-none">
+                        ⬅ Cancel
+                    </a>
+                    <button type="submit" class="btn-premium pulse-hover">
+                        💾 Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
-    <div>
-        <label>Description</label>
-        <textarea asp-for="Task.Description"></textarea>
-    </div>
-
-    <div>
-        <label>Status</label>
-
-        <select asp-for="Task.Status">
-            <option value="ToDo">ToDo</option>
-            <option value="InProgress">InProgress</option>
-            <option value="Done">Done</option>
-        </select>
-    </div>
-
-    <button type="submit">
-        Save
-    </button>
-
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

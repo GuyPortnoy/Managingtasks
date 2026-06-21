@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Managingtasks.Models.Enums;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Managingtasks.Models.Entities;
 
@@ -21,6 +22,8 @@ public class TaskItem
     public DateTime UpdatedAt { get; set; }
 
     [Required]
+    [ValidateNever]
     public string UserId { get; set; } = null!;
     
 }
+

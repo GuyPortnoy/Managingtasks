@@ -40,6 +40,11 @@ public class EditModel : PageModel
 
     public IActionResult OnPost()
     {
+        if (!ModelState.IsValid)
+        {
+            return Page();
+        }
+
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         var taskInDb = _db.Tasks.FirstOrDefault(t =>
@@ -54,6 +59,8 @@ public class EditModel : PageModel
         taskInDb.Title = Task.Title;
         taskInDb.Description = Task.Description;
         taskInDb.Status = Task.Status;
+        taskInDb.Priority = Task.Priority;
+        taskInDb.UpdatedAt = DateTime.UtcNow;
 
         _db.SaveChanges();
 
